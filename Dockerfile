@@ -25,6 +25,9 @@ RUN apt-get update &&  \
     gem install sass
 
 
+# Install FireBase
+RUN npm install -g firebase-tools
+
 #ANDROID
 #JAVA
 
