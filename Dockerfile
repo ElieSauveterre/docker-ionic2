@@ -67,6 +67,8 @@ RUN npm install -g firebase-tools
 
 RUN mkdir myApp
 
+VOLUME ["/myApp"]
+
 WORKDIR myApp
 EXPOSE 8100 35729
 CMD ["ionic", "serve"]
