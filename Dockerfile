@@ -14,15 +14,15 @@ ENV DEBIAN_FRONTEND=noninteractive \
 # Install basics
 RUN apt-get update &&  \
     apt-get install -y git wget curl unzip ruby vim && \
-
     curl --retry 3 -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" && \
     tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 && \
     rm "node-v$NODE_VERSION-linux-x64.tar.gz" && \
     npm install -g npm@"$NPM_VERSION" && \
     npm install -g grunt-cli@"$GRUNT_VERSION" bower@"$BOWER_VERSION"  cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION" && \
-    npm cache clear && \
-    gem install sass \
+    npm cache clear
 
+# Install Sass
+RUN gem install sass
 
 # Install FireBase
 RUN npm install -g firebase-tools
