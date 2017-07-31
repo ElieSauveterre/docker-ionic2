@@ -22,7 +22,8 @@ RUN apt-get update &&  \
     npm cache clear
 
 # Install Sass
-RUN gem install sass
+#RUN apt-get install -y libz-dev libiconv-hook1 libiconv-hook-dev ruby-dev make
+#RUN gem install sass
 
 # Install FireBase
 RUN npm install -g firebase-tools
