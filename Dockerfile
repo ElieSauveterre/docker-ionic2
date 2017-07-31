@@ -21,8 +21,7 @@ RUN apt-get update &&  \
     npm install -g npm@"$NPM_VERSION" && \
     npm install -g grunt-cli@"$GRUNT_VERSION" bower@"$BOWER_VERSION"  cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION" && \
     npm cache clear && \
-
-    gem install sass
+    gem install sass \
 
 
 # Install FireBase
