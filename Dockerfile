@@ -58,7 +58,7 @@ RUN cd /opt && \
 
 # Setup environment
 ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:/opt/tools
-RUN echo "export PATH=/opt/android-sdk-linux/tools/tools:/opt/android-sdk-linux/tools/platform-tools:/opt/tools:$PATH" >> /root/.bashrc
+RUN echo "export PATH=/opt/android-sdk-linux/build-tools/23.0.2:/opt/android-sdk-linux/tools/tools:/opt/android-sdk-linux/tools/platform-tools:/opt/tools:$PATH" >> /root/.bashrc
 RUN echo "export ANDROID_HOME=/opt/android-sdk-linux" >> /root/.bashrc
 
 COPY android-accept-licenses.sh /opt/tools/
