@@ -71,6 +71,7 @@ RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"ext
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"android-23\" --no-ui --force -a"]
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-android-m2repository\" --no-ui --force -a"]
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-google-m2repository\" --no-ui --force -a"]
+RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-google-play_billing\" --no-ui --force -a"]
 
 RUN mkdir ${ANDROID_HOME}/licenses
 RUN echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > ${ANDROID_HOME}/licenses/android-sdk-license
