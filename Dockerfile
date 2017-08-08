@@ -9,11 +9,12 @@ ENV DEBIAN_FRONTEND=noninteractive \
     BOWER_VERSION=1.7.7 \
     CORDOVA_VERSION=6.5.0 \
     GRUNT_VERSION=0.1.13 \
-    GULP_VERSION=3.9.1
+    GULP_VERSION=3.9.1 \
+    SUPPLY_VERSION=1.0.0
 
 # Install basics
 RUN apt-get update &&  \
-    apt-get install -y git wget curl unzip ruby vim && \
+    apt-get install -y git wget curl unzip gcc make g++ ruby rubygems ruby-dev ruby-all-dev vim && \
     curl --retry 3 -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" && \
     tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 && \
     rm "node-v$NODE_VERSION-linux-x64.tar.gz" && \
@@ -22,8 +23,7 @@ RUN apt-get update &&  \
     npm cache clear
 
 # Install Sass
-#RUN apt-get install -y libz-dev libiconv-hook1 libiconv-hook-dev ruby-dev make
-#RUN gem install sass
+RUN gem install sass
 
 # Install FireBase
 RUN npm install -g firebase-tools
@@ -75,6 +75,34 @@ RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"ext
 
 RUN mkdir ${ANDROID_HOME}/licenses
 RUN echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > ${ANDROID_HOME}/licenses/android-sdk-license
+
+# Install Fastlane Supply for APK publishing
+RUN gem install --no-ri --no-rdoc supply -v ${SUPPLY_VERSION}
+
+# Pre download/install the version of gradle used for the installed version of cordova
+# for faster CI build
+RUN cd /tmp \
+    && export NPM_CONFIG_CACHE=/tmp/.npm \
+    && export NPM_CONFIG_TMP=/tmp/.npm-tmp \
+    && mkdir -p \
+        /tmp/.npm \
+        /tmp/.npm-tmp \
+    && echo n | ionic start test-app tabs \
+    && cd test-app \
+    && ionic platform add android \
+    && ionic build android \
+    && rm -rf \
+        /root/.android/debug.keystore \
+        /root/.config \
+        /root/.cordova \
+        /root/.ionic \
+        /root/.v8flags.*.json \
+        /tmp/.npm \
+        /tmp/.npm-tmp \
+        /tmp/hsperfdata_root/* \
+        /tmp/ionic-starter-* \
+        /tmp/native-platform*dir \
+        /tmp/test-app
 
 RUN mkdir myApp
 
