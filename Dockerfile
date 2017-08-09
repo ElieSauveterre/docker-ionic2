@@ -10,7 +10,10 @@ ENV DEBIAN_FRONTEND=noninteractive \
     CORDOVA_VERSION=6.5.0 \
     GRUNT_VERSION=0.1.13 \
     GULP_VERSION=3.9.1 \
-    SUPPLY_VERSION=1.0.0
+    SUPPLY_VERSION=1.0.0 \
+    ANDROID_SDK_VERSION=24.4.1 \
+    ANDROID_BUILD_TOOLS_VERSION=23.0.2 \
+    ANDROID_APIS="android-23"
 
 # Install basics
 RUN apt-get update &&  \
@@ -31,16 +34,14 @@ RUN npm install -g firebase-tools
 # Install typings
 RUN npm install -g typings
 
-#ANDROID
-#JAVA
-
+# ANDROID
+# JAVA
 # install python-software-properties (so you can do add-apt-repository)
 RUN apt-get update &&  \
     apt-get install -y -q python-software-properties software-properties-common  && \
     add-apt-repository ppa:webupd8team/java -y && \
     echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
     apt-get update && apt-get -y install oracle-java8-installer
-
 
 #ANDROID STUFF
 RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
@@ -52,13 +53,13 @@ RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
 
 # Install Android SDK
 RUN cd /opt && \
-    wget https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz && \
-    tar xzf android-sdk_r24.4.1-linux.tgz && \
-    rm android-sdk_r24.4.1-linux.tgz
+    wget https://dl.google.com/android/android-sdk_r${ANDROID_SDK_VERSION}-linux.tgz && \
+    tar xzf android-sdk_r${ANDROID_SDK_VERSION}-linux.tgz && \
+    rm android-sdk_r${ANDROID_SDK_VERSION}-linux.tgz
 
 # Setup environment
 ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:/opt/tools
-RUN echo "export PATH=/opt/android-sdk-linux/build-tools/23.0.2:/opt/android-sdk-linux/tools/tools:/opt/android-sdk-linux/tools/platform-tools:/opt/tools:$PATH" >> /root/.bashrc
+RUN echo "export PATH=/opt/android-sdk-linux/build-tools/${ANDROID_BUILD_TOOLS_VERSION}:/opt/android-sdk-linux/tools/tools:/opt/android-sdk-linux/tools/platform-tools:/opt/tools:$PATH" >> /root/.bashrc
 RUN echo "export ANDROID_HOME=/opt/android-sdk-linux" >> /root/.bashrc
 
 COPY android-accept-licenses.sh /opt/tools/
@@ -66,9 +67,9 @@ COPY android-accept-licenses.sh /opt/tools/
 # Install sdk elements
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter tools --no-ui --force -a"]
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter platform-tools --no-ui --force -a"]
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"build-tools-23.0.2\" --no-ui --force -a"]
+RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"build-tools-${ANDROID_BUILD_TOOLS_VERSION}\" --no-ui --force -a"]
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-android-support\" --no-ui --force -a"]
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"android-23\" --no-ui --force -a"]
+RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"${ANDROID_APIS}\" --no-ui --force -a"]
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-android-m2repository\" --no-ui --force -a"]
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-google-m2repository\" --no-ui --force -a"]
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-google-play_billing\" --no-ui --force -a"]
