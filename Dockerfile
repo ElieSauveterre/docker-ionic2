@@ -12,7 +12,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     GULP_VERSION=3.9.1 \
     SUPPLY_VERSION=1.0.0 \
     ANDROID_SDK_VERSION=24.4.1 \
-    ANDROID_BUILD_TOOLS_VERSION=23.0.2 \
+    ANDROID_BUILD_TOOLS_VERSION="build-tools-23.0.2" \
     ANDROID_APIS="android-23"
 
 # Install basics
@@ -65,14 +65,14 @@ RUN echo "export ANDROID_HOME=/opt/android-sdk-linux" >> /root/.bashrc
 COPY android-accept-licenses.sh /opt/tools/
 
 # Install sdk elements
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter tools --no-ui --force -a"]
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter platform-tools --no-ui --force -a"]
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"build-tools-$ANDROID_BUILD_TOOLS_VERSION\" --no-ui --force -a"]
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-android-support\" --no-ui --force -a"]
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"$ANDROID_APIS\" --no-ui --force -a"]
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-android-m2repository\" --no-ui --force -a"]
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-google-m2repository\" --no-ui --force -a"]
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-google-play_billing\" --no-ui --force -a"]
+RUN echo y | android update sdk --no-ui --all --filter "tools" ; \
+    echo y | android update sdk --no-ui --all --filter "platform-tools" ; \
+    echo y | android update sdk --no-ui --all --filter "${ANDROID_BUILD_TOOLS_VERSION}" ; \
+    echo y | android update sdk --no-ui --all --filter "extra-android-support" ; \
+    echo y | android update sdk --no-ui --all --filter "${ANDROID_APIS}" ; \
+    echo y | android update sdk --no-ui --all --filter "extra-android-m2repository" ; \
+    echo y | android update sdk --no-ui --all --filter "extra-google-m2repository" ; \
+    echo y | android update sdk --no-ui --all --filter "extra-google-play_billing" ;
 
 RUN mkdir ${ANDROID_HOME}/licenses
 RUN echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > ${ANDROID_HOME}/licenses/android-sdk-license
