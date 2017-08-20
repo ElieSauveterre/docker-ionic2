@@ -67,9 +67,9 @@ COPY android-accept-licenses.sh /opt/tools/
 # Install sdk elements
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter tools --no-ui --force -a"]
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter platform-tools --no-ui --force -a"]
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"build-tools-${ANDROID_BUILD_TOOLS_VERSION}\" --no-ui --force -a"]
+RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"build-tools-$ANDROID_BUILD_TOOLS_VERSION\" --no-ui --force -a"]
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-android-support\" --no-ui --force -a"]
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"${ANDROID_APIS}\" --no-ui --force -a"]
+RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"$ANDROID_APIS\" --no-ui --force -a"]
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-android-m2repository\" --no-ui --force -a"]
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-google-m2repository\" --no-ui --force -a"]
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --filter \"extra-google-play_billing\" --no-ui --force -a"]
