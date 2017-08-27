@@ -12,8 +12,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
     GULP_VERSION=3.9.1 \
     SUPPLY_VERSION=1.0.0 \
     ANDROID_SDK_VERSION=24.4.1 \
-    ANDROID_BUILD_TOOLS_VERSION="build-tools-23.0.2" \
-    ANDROID_APIS="android-23"
+    ANDROID_BUILD_TOOLS_VERSION=23.0.2 \
+    ANDROID_APIS="android-24"
 
 # Install basics
 RUN apt-get update &&  \
@@ -67,7 +67,7 @@ COPY android-accept-licenses.sh /opt/tools/
 # Install sdk elements
 RUN echo y | android update sdk --no-ui --all --filter "tools" ; \
     echo y | android update sdk --no-ui --all --filter "platform-tools" ; \
-    echo y | android update sdk --no-ui --all --filter "${ANDROID_BUILD_TOOLS_VERSION}" ; \
+    echo y | android update sdk --no-ui --all --filter "build-tools-${ANDROID_BUILD_TOOLS_VERSION}" ; \
     echo y | android update sdk --no-ui --all --filter "extra-android-support" ; \
     echo y | android update sdk --no-ui --all --filter "${ANDROID_APIS}" ; \
     echo y | android update sdk --no-ui --all --filter "extra-android-m2repository" ; \
