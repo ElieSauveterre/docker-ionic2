@@ -76,7 +76,7 @@ RUN echo y | android update sdk --no-ui --all --filter "tools" ; \
     echo y | android update sdk --no-ui --all --filter "extra-google-play_billing" ;
 
 RUN mkdir ${ANDROID_HOME}/licenses
-RUN echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > ${ANDROID_HOME}/licenses/android-sdk-license
+RUN echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e" > ${ANDROID_HOME}/licenses/android-sdk-license
 
 # Install Fastlane Supply for APK publishing
 RUN gem install --no-ri --no-rdoc supply -v ${SUPPLY_VERSION}
@@ -89,10 +89,12 @@ RUN cd /tmp \
     && mkdir -p \
         /tmp/.npm \
         /tmp/.npm-tmp \
-    && echo n | ionic start test-app tabs \
+    && git config --global user.email "you@example.com" \
+    && git config --global user.name "Your Name" \
+    && echo n | ionic start test-app tabs --no-interactive \
     && cd test-app \
-    && ionic platform add android \
-    && ionic build android \
+    && ionic cordova platform add android --no-interactive \
+    && ionic cordova build android --no-interactive \
     && rm -rf \
         /root/.android/debug.keystore \
         /root/.config \
