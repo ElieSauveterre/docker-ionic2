@@ -1,4 +1,4 @@
-FROM     ubuntu:16.10
+FROM     ubuntu:17.10
 MAINTAINER contact [at] eliesauveterre [dot] com
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -17,7 +17,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 # Install basics
 RUN apt-get update &&  \
-    apt-get install -y git wget curl unzip gcc make g++ ruby rubygems ruby-dev ruby-all-dev vim && \
+    apt-get install -y git wget curl unzip gcc make g++ vim && \
     curl --retry 3 -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" && \
     tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 && \
     rm "node-v$NODE_VERSION-linux-x64.tar.gz" && \
@@ -26,6 +26,7 @@ RUN apt-get update &&  \
     npm cache clear
 
 # Install Sass
+RUN apt-get install -y ruby-full rubygems ruby-dev libffi-dev
 RUN gem install sass
 
 # Install FireBase
