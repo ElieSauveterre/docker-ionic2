@@ -79,9 +79,6 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager "platforms;${ANDROID_APIS}"
 RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;android;m2repository"
 RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository"
 
-##RUN mkdir ${ANDROID_HOME}/licenses
-##RUN echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e" > ${ANDROID_HOME}/licenses/android-sdk-license
-
 # Install Fastlane Supply for APK publishing
 RUN gem install --no-ri --no-rdoc supply -v ${SUPPLY_VERSION}
 
