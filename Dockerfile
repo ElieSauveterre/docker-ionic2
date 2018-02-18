@@ -7,13 +7,13 @@ ENV DEBIAN_FRONTEND=noninteractive \
     NPM_VERSION=3.10.10 \
     IONIC_VERSION=3.19.1 \
     BOWER_VERSION=1.7.7 \
-    CORDOVA_VERSION=6.5.0 \
+    CORDOVA_VERSION=8.0.0 \
     GRUNT_VERSION=0.1.13 \
     GULP_VERSION=3.9.1 \
     SUPPLY_VERSION=1.0.0 \
-    ANDROID_SDK_VERSION=24.4.1 \
-    ANDROID_BUILD_TOOLS_VERSION=23.0.2 \
-    ANDROID_APIS="android-24"
+    ANDROID_SDK_VERSION='3859397' \
+    ANDROID_BUILD_TOOLS_VERSION=26.0.2 \
+    ANDROID_APIS="android-26"
 
 # Install basics
 RUN apt-get update &&  \
@@ -54,29 +54,33 @@ RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
 
 # Install Android SDK
 RUN cd /opt && \
-    wget https://dl.google.com/android/android-sdk_r${ANDROID_SDK_VERSION}-linux.tgz && \
-    tar xzf android-sdk_r${ANDROID_SDK_VERSION}-linux.tgz && \
-    rm android-sdk_r${ANDROID_SDK_VERSION}-linux.tgz
+    mkdir android-sdk-linux && \
+    cd android-sdk-linux && \
+    wget https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_VERSION}.zip
+
+RUN cd $ANDROID_HOME && \
+    mkdir .android && \
+    unzip sdk-tools-linux-${ANDROID_SDK_VERSION}.zip && \
+    rm sdk-tools-linux-${ANDROID_SDK_VERSION}.zip
 
 # Setup environment
 ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:/opt/tools
-RUN echo "export PATH=/opt/android-sdk-linux/build-tools/${ANDROID_BUILD_TOOLS_VERSION}:/opt/android-sdk-linux/tools/tools:/opt/android-sdk-linux/tools/platform-tools:/opt/tools:$PATH" >> /root/.bashrc
+RUN echo "export PATH=/opt/android-sdk-linux/build-tools/${ANDROID_BUILD_TOOLS_VERSION}:/opt/android-sdk-linux/tools:/opt/android-sdk-linux/platform-tools:/opt/tools:$PATH" >> /root/.bashrc
 RUN echo "export ANDROID_HOME=/opt/android-sdk-linux" >> /root/.bashrc
 
-COPY android-accept-licenses.sh /opt/tools/
-
 # Install sdk elements
-RUN echo y | android update sdk --no-ui --all --filter "tools" ; \
-    echo y | android update sdk --no-ui --all --filter "platform-tools" ; \
-    echo y | android update sdk --no-ui --all --filter "build-tools-${ANDROID_BUILD_TOOLS_VERSION}" ; \
-    echo y | android update sdk --no-ui --all --filter "extra-android-support" ; \
-    echo y | android update sdk --no-ui --all --filter "${ANDROID_APIS}" ; \
-    echo y | android update sdk --no-ui --all --filter "extra-android-m2repository" ; \
-    echo y | android update sdk --no-ui --all --filter "extra-google-m2repository" ; \
-    echo y | android update sdk --no-ui --all --filter "extra-google-play_billing" ;
+RUN mkdir /root/.android && \
+    touch /root/.android/repositories.cfg
+RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+RUN $ANDROID_HOME/tools/bin/sdkmanager "tools"
+RUN $ANDROID_HOME/tools/bin/sdkmanager "platform-tools"
+RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}"
+RUN $ANDROID_HOME/tools/bin/sdkmanager "platforms;${ANDROID_APIS}"
+RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;android;m2repository"
+RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository"
 
-RUN mkdir ${ANDROID_HOME}/licenses
-RUN echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e" > ${ANDROID_HOME}/licenses/android-sdk-license
+##RUN mkdir ${ANDROID_HOME}/licenses
+##RUN echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e" > ${ANDROID_HOME}/licenses/android-sdk-license
 
 # Install Fastlane Supply for APK publishing
 RUN gem install --no-ri --no-rdoc supply -v ${SUPPLY_VERSION}
@@ -94,7 +98,7 @@ RUN cd /tmp \
     && echo n | ionic start test-app tabs --no-interactive \
     && cd test-app \
     && ionic cordova platform add android --no-interactive \
-    && ionic cordova build android --no-interactive \
+    && ionic cordova build android --prod --no-interactive \
     && rm -rf \
         /root/.android/debug.keystore \
         /root/.config \
@@ -111,9 +115,9 @@ RUN cd /tmp \
 RUN mkdir myApp
 
 ### Clean
-RUN apt-get -y autoclean
-RUN apt-get -y clean
-RUN apt-get -y autoremove
+#RUN apt-get -y autoclean
+#RUN apt-get -y clean
+#RUN apt-get -y autoremove
 
 VOLUME ["/myApp"]
 
