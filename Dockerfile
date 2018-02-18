@@ -115,9 +115,9 @@ RUN cd /tmp \
 RUN mkdir myApp
 
 ### Clean
-#RUN apt-get -y autoclean
-#RUN apt-get -y clean
-#RUN apt-get -y autoremove
+RUN apt-get -y autoclean
+RUN apt-get -y clean
+RUN apt-get -y autoremove
 
 VOLUME ["/myApp"]
 
