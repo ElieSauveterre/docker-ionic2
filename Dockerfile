@@ -7,13 +7,13 @@ ENV DEBIAN_FRONTEND=noninteractive \
     NPM_VERSION=3.10.10 \
     IONIC_VERSION=3.19.1 \
     BOWER_VERSION=1.7.7 \
-    CORDOVA_VERSION=6.5.0 \
+    CORDOVA_VERSION=7.1.0 \
     GRUNT_VERSION=0.1.13 \
     GULP_VERSION=3.9.1 \
     SUPPLY_VERSION=1.0.0 \
     ANDROID_SDK_VERSION=24.4.1 \
-    ANDROID_BUILD_TOOLS_VERSION=23.0.2 \
-    ANDROID_APIS="android-24"
+    ANDROID_BUILD_TOOLS_VERSION=25.0.2 \
+    ANDROID_APIS="android-25"
 
 # Install basics
 RUN apt-get update &&  \
@@ -91,9 +91,11 @@ RUN cd /tmp \
         /tmp/.npm-tmp \
     && git config --global user.email "you@example.com" \
     && git config --global user.name "Your Name" \
-    && echo n | ionic start test-app tabs --no-interactive \
-    && cd test-app \
+    && echo n | ionic start test-app tabs --no-interactive
+
+RUN cd /tmp/test-app \
     && ionic cordova platform add android --no-interactive \
+    && sed -i '3i <preference name="android-targetSdkVersion" value="25" />' config.xml \
     && ionic cordova build android --no-interactive \
     && rm -rf \
         /root/.android/debug.keystore \
