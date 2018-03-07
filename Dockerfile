@@ -109,6 +109,14 @@ RUN cd /tmp \
         /tmp/native-platform*dir \
         /tmp/test-app
 
+# Install Python and AWS tools
+RUN wget https://bootstrap.pypa.io/get-pip.py
+RUN python3.6 get-pip.py
+RUN echo "export PATH=/root/.local/bin:$PATH" >>                        /root/.bashrc
+RUN export PATH=/root/.local/bin:$PATH
+RUN pip install awsebcli==3.10.1 --upgrade --user
+RUN pip install --upgrade --user awscli
+
 RUN mkdir myApp
 
 ### Clean
