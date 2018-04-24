@@ -10,7 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     CORDOVA_VERSION=8.0.0 \
     GRUNT_VERSION=0.1.13 \
     GULP_VERSION=3.9.1 \
-    SUPPLY_VERSION=1.0.0 \
+    SUPPLY_VERSION=2.93.1 \
     ANDROID_SDK_VERSION='3859397' \
     ANDROID_BUILD_TOOLS_VERSION=26.0.2 \
     ANDROID_APIS="android-26"
@@ -80,7 +80,7 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;android;m2repository"
 RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository"
 
 # Install Fastlane Supply for APK publishing
-RUN gem install --no-ri --no-rdoc supply -v ${SUPPLY_VERSION}
+RUN gem install --no-ri --no-rdoc fastlane -v ${SUPPLY_VERSION}
 
 # Pre download/install the version of gradle used for the installed version of cordova
 # for faster CI build
