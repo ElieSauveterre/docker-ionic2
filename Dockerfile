@@ -117,6 +117,12 @@ RUN export PATH=/root/.local/bin:$PATH
 RUN pip install awsebcli==3.10.1 --upgrade --user
 RUN pip install --upgrade --user awscli
 
+# Install Chrome for Prerender
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list \
+    apt-get update \
+    apt-get install google-chrome-stable
+
 RUN mkdir myApp
 
 ### Clean
