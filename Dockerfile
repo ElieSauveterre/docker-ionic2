@@ -3,9 +3,9 @@ MAINTAINER contact [at] eliesauveterre [dot] com
 
 ENV DEBIAN_FRONTEND=noninteractive \
     ANDROID_HOME=/opt/android-sdk-linux \
-    NODE_VERSION=6.11.2 \
-    NPM_VERSION=3.10.10 \
-    IONIC_VERSION=3.19.1 \
+    NODE_VERSION=8.12.0 \
+    NPM_VERSION=6.4.1 \
+    IONIC_VERSION=4.1.2 \
     BOWER_VERSION=1.7.7 \
     CORDOVA_VERSION=8.0.0 \
     GRUNT_VERSION=0.1.13 \
@@ -22,8 +22,7 @@ RUN apt-get update &&  \
     tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 && \
     rm "node-v$NODE_VERSION-linux-x64.tar.gz" && \
     npm install -g npm@"$NPM_VERSION" && \
-    npm install -g grunt-cli@"$GRUNT_VERSION" bower@"$BOWER_VERSION"  cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION" && \
-    npm cache clear
+    npm install -g grunt-cli@"$GRUNT_VERSION" bower@"$BOWER_VERSION"  cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION"
 
 # Install Sass
 RUN apt-get install -y ruby-full rubygems ruby-dev libffi-dev
@@ -117,15 +116,10 @@ RUN export PATH=/root/.local/bin:$PATH
 RUN pip install awsebcli==3.10.1 --upgrade --user
 RUN pip install --upgrade --user awscli
 
-# Install Chrome for Prerender
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get update && \
-    apt-get install -y google-chrome-stable
-
 RUN mkdir myApp
 
 ### Clean
+RUN npm cache clear --force
 RUN apt-get -y autoclean
 RUN apt-get -y clean
 RUN apt-get -y autoremove
