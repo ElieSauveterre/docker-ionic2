@@ -38,11 +38,8 @@ RUN npm install -g typings
 # ANDROID
 # JAVA
 # install python-software-properties (so you can do add-apt-repository)
-RUN apt-get update &&  \
-    apt-get install -y -q python-software-properties software-properties-common  && \
-    add-apt-repository ppa:webupd8team/java -y && \
-    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
-    apt-get update && apt-get -y install oracle-java8-installer
+RUN apt-get install -y -q python-software-properties software-properties-common
+RUN apt-get install -y openjdk-8-jdk
 
 #ANDROID STUFF
 RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
