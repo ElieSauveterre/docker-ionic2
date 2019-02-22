@@ -3,16 +3,14 @@ MAINTAINER contact [at] eliesauveterre [dot] com
 
 ENV DEBIAN_FRONTEND=noninteractive \
     ANDROID_HOME=/opt/android-sdk-linux \
-    NODE_VERSION=8.12.0 \
-    NPM_VERSION=6.4.1 \
-    IONIC_VERSION=4.1.2 \
-    BOWER_VERSION=1.7.7 \
-    CORDOVA_VERSION=8.0.0 \
-    GRUNT_VERSION=0.1.13 \
+    NODE_VERSION=8.15.0 \
+    NPM_VERSION=6.7.0 \
+    IONIC_VERSION=4.10.3 \
+    CORDOVA_VERSION=8.1.2 \
     GULP_VERSION=3.9.1 \
     SUPPLY_VERSION=2.93.1 \
-    ANDROID_SDK_VERSION='3859397' \
-    ANDROID_BUILD_TOOLS_VERSION=26.0.2 \
+    ANDROID_SDK_VERSION='4333796' \
+    ANDROID_BUILD_TOOLS_VERSION=27.0.3 \
     ANDROID_APIS="android-26"
 
 # Install basics
@@ -22,26 +20,17 @@ RUN apt-get update &&  \
     tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 && \
     rm "node-v$NODE_VERSION-linux-x64.tar.gz" && \
     npm install -g npm@"$NPM_VERSION" && \
-    npm install -g grunt-cli@"$GRUNT_VERSION" bower@"$BOWER_VERSION"  cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION"
+    npm install -g cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION" firebase-tools typings
 
 # Install Sass
 RUN apt-get install -y ruby-full rubygems ruby-dev libffi-dev
 RUN gem install sass
 
-# Install FireBase
-RUN npm install -g firebase-tools
-
-# Install typings
-RUN npm install -g typings
-
 # ANDROID
 # JAVA
 # install python-software-properties (so you can do add-apt-repository)
-RUN apt-get update &&  \
-    apt-get install -y -q python-software-properties software-properties-common  && \
-    add-apt-repository ppa:webupd8team/java -y && \
-    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
-    apt-get update && apt-get -y install oracle-java8-installer
+RUN apt-get install -y -q python-software-properties software-properties-common
+RUN apt-get install -y openjdk-8-jdk
 
 #ANDROID STUFF
 RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
