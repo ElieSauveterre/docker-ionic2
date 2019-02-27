@@ -128,6 +128,8 @@ RUN groupadd -g ${PGID} ionicuser && \
     useradd -u ${PUID} -g ionicuser -m ionicuser && \
     apt-get update -yqq
 
+RUN chmod 777 -R /tmp
+
 USER ionicuser
 
 VOLUME ["/myApp"]
