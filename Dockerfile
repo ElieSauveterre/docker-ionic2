@@ -113,25 +113,6 @@ RUN apt-get -y autoclean
 RUN apt-get -y clean
 RUN apt-get -y autoremove
 
-#####################################
-# Non-Root User:
-#####################################
-
-# Add a non-root user to prevent files being created with root permissions on host machine.
-ARG PUID=1000
-ARG PGID=1000
-
-ENV PUID ${PUID}
-ENV PGID ${PGID}
-
-RUN groupadd -g ${PGID} ionicuser && \
-    useradd -u ${PUID} -g ionicuser -m ionicuser && \
-    apt-get update -yqq
-
-RUN chmod 777 -R /tmp
-
-USER ionicuser
-
 VOLUME ["/myApp"]
 
 WORKDIR myApp
