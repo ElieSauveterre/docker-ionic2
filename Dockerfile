@@ -2,16 +2,12 @@ FROM     ubuntu:17.10
 MAINTAINER contact [at] eliesauveterre [dot] com
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    ANDROID_HOME=/opt/android-sdk-linux \
     NODE_VERSION=8.15.0 \
     NPM_VERSION=6.7.0 \
     IONIC_VERSION=4.10.3 \
     CORDOVA_VERSION=8.1.2 \
     GULP_VERSION=3.9.1 \
-    SUPPLY_VERSION=2.93.1 \
-    ANDROID_SDK_VERSION='4333796' \
-    ANDROID_BUILD_TOOLS_VERSION=27.0.3 \
-    ANDROID_APIS="android-26"
+    SUPPLY_VERSION=2.93.1
 
 # Install basics
 RUN apt-get update &&  \
@@ -33,6 +29,11 @@ RUN apt-get install -y -q python-software-properties software-properties-common
 RUN apt-get install -y openjdk-8-jdk
 
 #ANDROID STUFF
+ENV ANDROID_HOME=/opt/android-sdk-linux \
+    ANDROID_SDK_VERSION='4333796' \
+    ANDROID_BUILD_TOOLS_VERSION=28.0.3 \
+    ANDROID_APIS="android-28"
+
 RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
     dpkg --add-architecture i386 && \
     apt-get install -y --force-yes expect ant wget gradle libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5 lib32z1 qemu-kvm kmod && \
