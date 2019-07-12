@@ -1,21 +1,21 @@
-FROM     ubuntu:17.10
+FROM     ubuntu:18.04
 MAINTAINER contact [at] eliesauveterre [dot] com
 
 ENV DEBIAN_FRONTEND=noninteractive \
     NODE_VERSION=8.15.0 \
-    NPM_VERSION=6.7.0 \
-    IONIC_VERSION=4.10.3 \
+    NPM_VERSION=6.10.1 \
+    IONIC_VERSION=5.2.2 \
     CORDOVA_VERSION=8.1.2 \
     GULP_VERSION=3.9.1 \
     SUPPLY_VERSION=2.93.1
 
 # Install basics
 RUN apt-get update &&  \
-    apt-get install -y git wget curl unzip gcc make g++ vim && \
+    apt-get install -y git wget curl unzip gcc make g++ vim xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 && \
     curl --retry 3 -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" && \
     tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 && \
     rm "node-v$NODE_VERSION-linux-x64.tar.gz" && \
-    npm install -g npm@"$NPM_VERSION" && \
+    npm install -g npm@"$NPM_VERSION" npmrc && \
     npm install -g cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION" firebase-tools typings
 
 # Install Sass
@@ -25,7 +25,6 @@ RUN gem install sass
 # ANDROID
 # JAVA
 # install python-software-properties (so you can do add-apt-repository)
-RUN apt-get install -y -q python-software-properties software-properties-common
 RUN apt-get install -y openjdk-8-jdk
 
 #ANDROID STUFF
