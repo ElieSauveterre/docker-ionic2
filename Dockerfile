@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     IONIC_VERSION=5.2.3 \
     CORDOVA_VERSION=8.1.2 \
     GULP_VERSION=3.9.1 \
-    SUPPLY_VERSION=2.93.1
+    FASTLANE_VERSION=2.128.0
 
 # Install basics
 RUN apt-get update &&  \
@@ -76,8 +76,9 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager "platforms;${ANDROID_APIS}"
 RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;android;m2repository"
 RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository"
 
-# Install Fastlane Supply for APK publishing
-RUN gem install --no-ri --no-rdoc fastlane -v ${SUPPLY_VERSION}
+# Install Fastlane for APK publishing
+RUN gem install --no-ri --no-rdoc fastlane -v ${FASTLANE_VERSION}
+RUN gem cleanup
 
 # Pre download/install the version of gradle used for the installed version of cordova
 # for faster CI build
