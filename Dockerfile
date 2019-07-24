@@ -4,7 +4,7 @@ MAINTAINER contact [at] eliesauveterre [dot] com
 ENV DEBIAN_FRONTEND=noninteractive \
     NODE_VERSION=8.15.0 \
     NPM_VERSION=6.7.0 \
-    IONIC_VERSION=4.10.3 \
+    IONIC_VERSION=5.2.3 \
     CORDOVA_VERSION=8.1.2 \
     GULP_VERSION=3.9.1 \
     SUPPLY_VERSION=2.93.1
@@ -14,9 +14,18 @@ RUN apt-get update &&  \
     apt-get install -y git wget curl unzip gcc make g++ vim xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 && \
     curl --retry 3 -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" && \
     tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 && \
-    rm "node-v$NODE_VERSION-linux-x64.tar.gz" && \
-    npm install -g npm@"$NPM_VERSION" npmrc && \
-    npm install -g cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION" firebase-tools typings
+    rm "node-v$NODE_VERSION-linux-x64.tar.gz"
+
+# Install Python and AWS tools
+RUN wget https://bootstrap.pypa.io/get-pip.py
+RUN python3.6 get-pip.py
+RUN echo "export PATH=/root/.local/bin:$PATH" >>                        /root/.bashrc
+RUN export PATH=/root/.local/bin:$PATH
+RUN pip install awsebcli==3.10.1 --upgrade --user
+RUN pip install --upgrade --user awscli
+
+RUN npm install -g npm@"$NPM_VERSION" npmrc cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION" firebase-tools typings
+RUN npm install -g cordova-res --unsafe-perm=true --allow-root
 
 # Install Sass
 RUN apt-get install -y ruby-full rubygems ruby-dev libffi-dev
@@ -96,14 +105,6 @@ RUN cd /tmp \
         /tmp/ionic-starter-* \
         /tmp/native-platform*dir \
         /tmp/test-app
-
-# Install Python and AWS tools
-RUN wget https://bootstrap.pypa.io/get-pip.py
-RUN python3.6 get-pip.py
-RUN echo "export PATH=/root/.local/bin:$PATH" >>                        /root/.bashrc
-RUN export PATH=/root/.local/bin:$PATH
-RUN pip install awsebcli==3.10.1 --upgrade --user
-RUN pip install --upgrade --user awscli
 
 RUN mkdir myApp
 
