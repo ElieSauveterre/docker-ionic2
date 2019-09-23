@@ -3,8 +3,8 @@ MAINTAINER contact [at] eliesauveterre [dot] com
 
 ENV DEBIAN_FRONTEND=noninteractive \
     ANDROID_HOME=/opt/android-sdk-linux \
-    NODE_VERSION=6.11.2 \
-    NPM_VERSION=3.10.10 \
+    NODE_VERSION=8.15.0 \
+    NPM_VERSION=6.7.0 \
     IONIC_VERSION=3.20.0 \
     BOWER_VERSION=1.7.7 \
     CORDOVA_VERSION=8.0.0 \
