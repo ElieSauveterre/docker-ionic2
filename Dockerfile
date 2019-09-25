@@ -1,4 +1,4 @@
-FROM     ubuntu:18.04
+FROM     ubuntu:19.04
 MAINTAINER contact [at] eliesauveterre [dot] com
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -14,20 +14,19 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 # Install basics
 RUN apt-get update &&  \
-    apt-get install -y git wget curl unzip gcc make g++ vim xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 && \
+    apt-get install -y git wget curl unzip gcc make g++ vim xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libvips-dev && \
     curl --retry 3 -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" && \
     tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 && \
     rm "node-v$NODE_VERSION-linux-x64.tar.gz"
 
 # Install Python and AWS tools
-RUN wget https://bootstrap.pypa.io/get-pip.py
-RUN python3.6 get-pip.py
-RUN echo "export PATH=/root/.local/bin:$PATH" >>                        /root/.bashrc
-RUN export PATH=/root/.local/bin:$PATH
+RUN apt-get install -y python3-pip
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN python get-pip.py
 RUN pip install awsebcli==3.10.1 --upgrade --user
 RUN pip install --upgrade --user awscli
 
-RUN npm install -g npm@"$NPM_VERSION" npmrc cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION" firebase-tools typings native-run
+RUN npm install -g npm@"$NPM_VERSION" npmrc cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION" firebase-tools typings
 RUN npm install -g cordova-res --unsafe-perm=true --allow-root
 
 # Install Sass
@@ -47,7 +46,7 @@ ENV ANDROID_HOME=/opt/android-sdk-linux \
 
 RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
     dpkg --add-architecture i386 && \
-    apt-get install -y --force-yes expect ant wget gradle libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5 lib32z1 qemu-kvm kmod && \
+    apt-get install -y expect ant wget gradle libc6-i386 lib32stdc++6 lib32gcc1 lib32z1 qemu-kvm kmod && \
     apt-get clean && \
     apt-get autoclean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
