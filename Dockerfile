@@ -4,7 +4,7 @@ MAINTAINER contact [at] eliesauveterre [dot] com
 ENV DEBIAN_FRONTEND=noninteractive \
     NODE_VERSION=8.15.0 \
     NPM_VERSION=6.7.0 \
-    IONIC_VERSION=5.2.3 \
+    IONIC_VERSION=5.3.0 \
     CORDOVA_VERSION=8.1.2 \
     GULP_VERSION=3.9.1 \
     FASTLANE_VERSION=2.128.0
@@ -24,7 +24,7 @@ RUN export PATH=/root/.local/bin:$PATH
 RUN pip install awsebcli==3.10.1 --upgrade --user
 RUN pip install --upgrade --user awscli
 
-RUN npm install -g npm@"$NPM_VERSION" npmrc cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION" firebase-tools typings
+RUN npm install -g npm@"$NPM_VERSION" npmrc cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" gulp@"$GULP_VERSION" firebase-tools typings native-run
 RUN npm install -g cordova-res --unsafe-perm=true --allow-root
 
 # Install Sass
