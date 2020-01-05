@@ -10,7 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     CORDOVA_VERSION=8.0.0 \
     GRUNT_VERSION=0.1.13 \
     GULP_VERSION=3.9.1 \
-    FASTLANE_VERSION=2.128.0
+    FASTLANE_VERSION=2.137.0
 
 # Install basics
 RUN apt-get update &&  \
