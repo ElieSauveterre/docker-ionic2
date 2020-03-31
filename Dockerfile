@@ -3,7 +3,7 @@ MAINTAINER contact [at] eliesauveterre [dot] com
 
 ENV DEBIAN_FRONTEND=noninteractive \
     NODE_VERSION=10.19.0 \
-    NPM_VERSION=6.13.4 \
+    NPM_VERSION=6.7.0 \
     IONIC_VERSION=5.3.0 \
     CORDOVA_VERSION=8.1.2 \
     GULP_VERSION=3.9.1 \
