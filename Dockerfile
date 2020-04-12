@@ -23,7 +23,7 @@ RUN export PATH=/root/.local/bin:$PATH
 RUN pip install awsebcli==3.10.1 --upgrade --user
 RUN pip install --upgrade --user awscli
 
-RUN npm install -g npm@"$NPM_VERSION" npmrc cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" firebase-tools typings native-run bit-bin
+RUN npm install -g npm@"$NPM_VERSION" npmrc cordova@"$CORDOVA_VERSION" @ionic/cli@"$IONIC_VERSION" firebase-tools typings native-run bit-bin
 RUN npm install -g cordova-res --unsafe-perm=true --allow-root
 
 # Install Sass
