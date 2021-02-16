@@ -77,6 +77,7 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;android;m2repository" --sdk_root=
 RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository" --sdk_root=${ANDROID_HOME}
 
 # Install Fastlane for APK publishing
+RUN gem install --no-ri --no-rdoc rake
 RUN gem install --no-ri --no-rdoc fastlane -v ${FASTLANE_VERSION}
 RUN gem cleanup
 
