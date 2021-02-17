@@ -3,6 +3,10 @@ FROM node:10-alpine
 ENV NPM_VERSION=6.7.0 \
     IONIC_VERSION=5.3.0
 
+RUN apk add --no-cache bash git && \
+    rm -rf /tmp/* && \
+    rm -rf /var/cache/apk/*
+
 RUN npm install -g npm@"$NPM_VERSION" npmrc ionic@"$IONIC_VERSION" firebase-tools typings bit-bin
 
 RUN mkdir myApp
