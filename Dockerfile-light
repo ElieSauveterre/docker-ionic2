@@ -1,0 +1,20 @@
+FROM node:10-alpine
+
+ENV NPM_VERSION=6.7.0 \
+    IONIC_VERSION=5.3.0 \
+    CORDOVA_VERSION=8.1.2 \
+    FASTLANE_VERSION=2.137.0
+
+RUN npm install -g npm@"$NPM_VERSION" npmrc ionic@"$IONIC_VERSION" firebase-tools typings bit-bin
+
+RUN mkdir myApp
+
+### Clean
+RUN npm cache clear --force
+
+VOLUME ["/myApp"]
+
+WORKDIR myApp
+EXPOSE 8100 35729
+
+CMD ["ionic", "serve"]
