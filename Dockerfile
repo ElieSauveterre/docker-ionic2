@@ -20,6 +20,9 @@ RUN apk add --no-cache --virtual .ruby-builddeps \
     python3
 RUN apk add --virtual .rundeps $runDeps
 
+RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
+RUN apk add --no-cache xxd@testing
+
 RUN cd /opt && \
     mkdir android-sdk-linux && \
     cd android-sdk-linux && \
