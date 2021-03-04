@@ -1,0 +1,3 @@
+FROM sauveterre/docker-ionic2:ionic5
+
+RUN apk add --no-cache bash git chromium
