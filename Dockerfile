@@ -2,9 +2,9 @@ FROM     ubuntu:18.04
 MAINTAINER contact [at] eliesauveterre [dot] com
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    NODE_VERSION=10.19.0 \
-    NPM_VERSION=6.14.4 \
-    IONIC_VERSION=6.5.0 \
+    NODE_VERSION=12.22.1 \
+    NPM_VERSION=6.14.12 \
+    IONIC_VERSION=6.12.4 \
     CORDOVA_VERSION=8.1.2 \
     FASTLANE_VERSION=2.137.0
 
@@ -23,8 +23,7 @@ RUN export PATH=/root/.local/bin:$PATH
 RUN pip install awsebcli==3.10.1 --upgrade --user
 RUN pip install --upgrade --user awscli
 
-RUN npm install -g npm@"$NPM_VERSION" npmrc cordova@"$CORDOVA_VERSION" @ionic/cli@"$IONIC_VERSION" firebase-tools typings native-run bit-bin
-RUN npm install -g cordova-res --unsafe-perm=true --allow-root
+RUN npm install -g npm@"$NPM_VERSION" npmrc @ionic/cli@"$IONIC_VERSION" firebase-tools typings native-run
 
 # Install Sass
 RUN apt-get install -y ruby-full rubygems ruby-dev libffi-dev
