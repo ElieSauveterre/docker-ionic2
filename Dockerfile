@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     NPM_VERSION=6.14.12 \
     IONIC_VERSION=6.12.4 \
     CORDOVA_VERSION=8.1.2 \
-    FASTLANE_VERSION=2.137.0
+    FASTLANE_VERSION=2.185.1
 
 # Install basics
 RUN apt-get update &&  \
@@ -75,7 +75,8 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;android;m2repository"
 RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository"
 
 # Install Fastlane for APK publishing
-RUN gem install --no-ri --no-rdoc fastlane -v ${FASTLANE_VERSION}
+RUN gem install rake
+RUN gem install --no-ri --no-rdoc fastlane
 RUN gem cleanup
 
 RUN mkdir myApp
