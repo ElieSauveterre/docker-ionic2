@@ -76,8 +76,7 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository"
 
 # Install Fastlane for APK publishing
 RUN gem install rake
-RUN gem install --no-ri --no-rdoc fastlane
-RUN gem cleanup
+RUN gem install --no-ri --no-rdoc fastlane bundler:2.1.4
 
 RUN mkdir myApp
 
