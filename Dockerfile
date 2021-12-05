@@ -35,10 +35,7 @@ RUN gem install sass
 RUN apt-get install -y openjdk-8-jdk
 
 #ANDROID STUFF
-ENV ANDROID_HOME=/opt/android-sdk-linux \
-    ANDROID_SDK_VERSION='4333796' \
-    ANDROID_BUILD_TOOLS_VERSION=28.0.3 \
-    ANDROID_APIS="android-28"
+ENV ANDROID_HOME=/opt/android-sdk-linux
 
 RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
     dpkg --add-architecture i386 && \
@@ -48,6 +45,10 @@ RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install Android SDK
+ENV ANDROID_SDK_VERSION='4333796' \
+    ANDROID_BUILD_TOOLS_VERSION=30.0.3 \
+    ANDROID_APIS="android-30"
+
 RUN cd /opt && \
     mkdir android-sdk-linux && \
     cd android-sdk-linux && \
