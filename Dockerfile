@@ -1,4 +1,4 @@
-FROM     ubuntu:18.04
+FROM ubuntu:20.04
 MAINTAINER contact [at] eliesauveterre [dot] com
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -6,22 +6,25 @@ ENV DEBIAN_FRONTEND=noninteractive \
     NPM_VERSION=6.14.12 \
     IONIC_VERSION=6.12.4 \
     CORDOVA_VERSION=8.1.2 \
-    FASTLANE_VERSION=2.185.1
+    FASTLANE_VERSION=2.185.0
+
+# Local mirrors
+RUN echo "deb mirror://mirrors.ubuntu.com/mirrors.txt focal main restricted universe multiverse" > /etc/apt/sources.list && \
+    echo "deb mirror://mirrors.ubuntu.com/mirrors.txt focal-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb mirror://mirrors.ubuntu.com/mirrors.txt focal-security main restricted universe multiverse" >> /etc/apt/sources.list && \
+    apt-get update
 
 # Install basics
 RUN apt-get update &&  \
-    apt-get install -y git wget curl unzip gcc make g++ vim xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 && \
+    apt-get install -y git wget curl unzip gcc make g++ vim xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 imagemagick jq && \
     curl --retry 3 -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" && \
     tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 && \
     rm "node-v$NODE_VERSION-linux-x64.tar.gz"
 
-# Install Python and AWS tools
-RUN wget https://bootstrap.pypa.io/get-pip.py
-RUN python3.6 get-pip.py
-RUN echo "export PATH=/root/.local/bin:$PATH" >>                        /root/.bashrc
-RUN export PATH=/root/.local/bin:$PATH
-RUN pip install awsebcli==3.10.1 --upgrade --user
-RUN pip install --upgrade --user awscli
+# Install AWS tools
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
 
 RUN npm install -g npm@"$NPM_VERSION" npmrc @ionic/cli@"$IONIC_VERSION" firebase-tools typings native-run
 
@@ -32,32 +35,32 @@ RUN gem install sass
 # ANDROID
 # JAVA
 # install python-software-properties (so you can do add-apt-repository)
-RUN apt-get install -y openjdk-8-jdk
+RUN apt-get install -y openjdk-11-jdk
 
 #ANDROID STUFF
 ENV ANDROID_HOME=/opt/android-sdk-linux
 
 RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
     dpkg --add-architecture i386 && \
-    apt-get install -y --force-yes expect ant wget gradle libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5 lib32z1 qemu-kvm kmod && \
+    apt-get install -y expect ant wget gradle libc6-i386 lib32stdc++6 lib32gcc1 lib32z1 qemu-kvm kmod && \
     apt-get clean && \
     apt-get autoclean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install Android SDK
-ENV ANDROID_SDK_VERSION='4333796' \
-    ANDROID_BUILD_TOOLS_VERSION=30.0.3 \
-    ANDROID_APIS="android-30"
+ENV ANDROID_SDK_VERSION='9123335' \
+    ANDROID_BUILD_TOOLS_VERSION=32.0.0 \
+    ANDROID_APIS="android-32"
 
 RUN cd /opt && \
     mkdir android-sdk-linux && \
     cd android-sdk-linux && \
-    wget https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_VERSION}.zip
+    wget https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip
 
 RUN cd $ANDROID_HOME && \
     mkdir .android && \
-    unzip sdk-tools-linux-${ANDROID_SDK_VERSION}.zip && \
-    rm sdk-tools-linux-${ANDROID_SDK_VERSION}.zip
+    unzip commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
+    rm commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip
 
 # Setup environment
 ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:/opt/tools
@@ -67,17 +70,20 @@ RUN echo "export ANDROID_HOME=/opt/android-sdk-linux" >> /root/.bashrc
 # Install sdk elements
 RUN mkdir /root/.android && \
     touch /root/.android/repositories.cfg
-RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-RUN $ANDROID_HOME/tools/bin/sdkmanager "tools"
-RUN $ANDROID_HOME/tools/bin/sdkmanager "platform-tools"
-RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}"
-RUN $ANDROID_HOME/tools/bin/sdkmanager "platforms;${ANDROID_APIS}"
-RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;android;m2repository"
-RUN $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository"
+RUN yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager --licenses --sdk_root=${ANDROID_HOME}
+RUN $ANDROID_HOME/cmdline-tools/bin/sdkmanager "tools" --sdk_root=${ANDROID_HOME}
+RUN $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platform-tools" --sdk_root=${ANDROID_HOME}
+RUN $ANDROID_HOME/cmdline-tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" --sdk_root=${ANDROID_HOME}
+RUN $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platforms;${ANDROID_APIS}" --sdk_root=${ANDROID_HOME}
+RUN $ANDROID_HOME/cmdline-tools/bin/sdkmanager "extras;android;m2repository" --sdk_root=${ANDROID_HOME}
+RUN $ANDROID_HOME/cmdline-tools/bin/sdkmanager "extras;google;m2repository" --sdk_root=${ANDROID_HOME}
 
 # Install Fastlane for APK publishing
 RUN gem install rake
-RUN gem install --no-ri --no-rdoc fastlane bundler:2.1.4
+RUN gem install fastlane -v ${FASTLANE_VERSION}
+RUN gem install bundler:1.17.3
+RUN gem cleanup
+
 
 RUN mkdir myApp
 
