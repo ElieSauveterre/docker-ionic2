@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     NPM_VERSION=6.14.12 \
     IONIC_VERSION=6.12.4 \
     CORDOVA_VERSION=8.1.2 \
-    FASTLANE_VERSION=2.185.0
+    FASTLANE_VERSION=2.211.0
 
 # Local mirrors
 RUN echo "deb mirror://mirrors.ubuntu.com/mirrors.txt focal main restricted universe multiverse" > /etc/apt/sources.list && \
