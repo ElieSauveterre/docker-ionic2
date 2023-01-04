@@ -2,10 +2,9 @@ FROM ubuntu:20.04
 MAINTAINER contact [at] eliesauveterre [dot] com
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    NODE_VERSION=12.22.1 \
-    NPM_VERSION=6.14.12 \
+    NODE_VERSION=14.19.3 \
+    NPM_VERSION=7.24.2 \
     IONIC_VERSION=6.12.4 \
-    CORDOVA_VERSION=8.1.2 \
     FASTLANE_VERSION=2.211.0
 
 # Local mirrors
